@@ -8,7 +8,7 @@ dependencies:
 
 test:
   post:
-    - docker run -d -p 8080:8080 --name pactbroker etg-pactbroker sleep 10
+    - docker run -d -p 8080:8080 --name pactbroker etg-pactbroker
     - curl -sSf http://localhost:8080 > /dev/null
 
 deployment:
