@@ -41,8 +41,8 @@ deploy_cluster() {
 make_task_def(){
 	task_template='[
 		{
-			"name": "go-sample-webapp",
-			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/go-sample-webapp:%s",
+			"name": "pactbroker",
+			"image": "636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
@@ -55,12 +55,12 @@ make_task_def(){
 		}
 	]'
 	
-	task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $CIRCLE_SHA1)
+	task_def=$(printf "$task_template" "636301108823" $CIRCLE_SHA1)
 }
 
 push_ecr_image(){
 	eval $(aws ecr get-login --region us-east-1)
-	docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/go-sample-webapp:$CIRCLE_SHA1
+	docker push 636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1
 }
 
 register_definition() {
