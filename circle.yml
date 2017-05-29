@@ -4,11 +4,11 @@ machine:
 
 dependencies:
   post:
-    - docker build -t etg-pactbroker .
+    - docker build -t 636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker .
 
 test:
   post:
-    - docker run -d -p 8080:8080 --name pactbroker etg-pactbroker
+    - docker run -d -p 8080:8080 --name pactbroker 636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker
     - curl -sSf http://localhost:8080 > /dev/null
 
 deployment:
