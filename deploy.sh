@@ -5,7 +5,7 @@
 # more bash-friendly output for jq
 JQ="jq --raw-output --exit-status"
 AWS_ACCOUNT_ID='636301108823'
-CIRCLE_SHA1='latest'
+# CIRCLE_SHA1='latest'
 
 configure_aws_cli(){
 	aws --version
