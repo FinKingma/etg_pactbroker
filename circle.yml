@@ -10,7 +10,8 @@ test:
   post:
     - docker run -d -p 8080 --name pactbroker $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1; sleep 10
     - curl -sSf $(docker port pactbroker 8080/tcp) > /dev/null
-
+    - export hostport=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' pactbroker)
+    
 deployment:
   prod:
     branch: master
