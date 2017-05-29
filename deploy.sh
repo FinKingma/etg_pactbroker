@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+# ref: https://github.com/circleci/go-ecs-ecr/blob/master/deploy.sh
+
 # more bash-friendly output for jq
 JQ="jq --raw-output --exit-status"
+AWS_ACCOUNT_ID='636301108823'
+CIRCLE_SHA1='latest'
 
 configure_aws_cli(){
 	aws --version
@@ -11,11 +15,11 @@ configure_aws_cli(){
 
 deploy_cluster() {
 
-    family="sample-webapp-task-family"
+    family="etg-pactbroker-family"
 
     make_task_def
     register_definition
-    if [[ $(aws ecs update-service --cluster sample-webapp-cluster --service sample-webapp-service --task-definition $revision | \
+    if [[ $(aws ecs update-service --cluster etg --service etg-pactbroker --task-definition $revision | \
                    $JQ '.service.taskDefinition') != $revision ]]; then
         echo "Error updating service."
         return 1
@@ -24,7 +28,7 @@ deploy_cluster() {
     # wait for older revisions to disappear
     # not really necessary, but nice for demos
     for attempt in {1..30}; do
-        if stale=$(aws ecs describe-services --cluster sample-webapp-cluster --services sample-webapp-service | \
+        if stale=$(aws ecs describe-services --cluster etg --services etg-pactbroker | \
                        $JQ ".services[0].deployments | .[] | select(.taskDefinition != \"$revision\") | .taskDefinition"); then
             echo "Waiting for stale deployments:"
             echo "$stale"
@@ -41,8 +45,8 @@ deploy_cluster() {
 make_task_def(){
 	task_template='[
 		{
-			"name": "pactbroker",
-			"image": "636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker",
+			"name": "etg-pactbroker",
+			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/pactbroker:%s",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
@@ -55,12 +59,12 @@ make_task_def(){
 		}
 	]'
 	
-	task_def=$(printf "$task_template" "636301108823" $CIRCLE_SHA1)
+	task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $CIRCLE_SHA1)
 }
 
 push_ecr_image(){
 	eval $(aws ecr get-login --region us-east-1)
-	docker push 636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1
+    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1
 }
 
 register_definition() {
