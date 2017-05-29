@@ -62,9 +62,9 @@ make_task_def(){
 }
 
 push_ecr_image(){
-    echo $(aws ecr get-login)
+    #echo $(aws ecr get-login)
 	eval $(aws ecr get-login --region us-east-1)
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker
+    docker push "636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker"
 }
 
 register_definition() {
