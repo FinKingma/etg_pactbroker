@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-# ref: https://github.com/circleci/go-ecs-ecr/blob/master/deploy.sh
-
 # more bash-friendly output for jq
 JQ="jq --raw-output --exit-status"
-AWS_ACCOUNT_ID=636301108823
 
 configure_aws_cli(){
 	aws --version
@@ -14,7 +11,7 @@ configure_aws_cli(){
 
 deploy_cluster() {
 
-    family="etg-pactbroker-family"
+    family="pactbroker-family"
 
     make_task_def
     register_definition
@@ -44,8 +41,8 @@ deploy_cluster() {
 make_task_def(){
 	task_template='[
 		{
-			"name": "etg-pactbroker",
-			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/pactbroker%s",
+			"name": "pactbroker",
+			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/pactbroker:%s",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
@@ -62,9 +59,8 @@ make_task_def(){
 }
 
 push_ecr_image(){
-    #echo $(aws ecr get-login)
 	eval $(aws ecr get-login --region us-east-1)
-    docker push "636301108823.dkr.ecr.us-east-1.amazonaws.com/pactbroker"
+	docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1
 }
 
 register_definition() {
