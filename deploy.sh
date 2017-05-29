@@ -5,6 +5,7 @@
 # more bash-friendly output for jq
 JQ="jq --raw-output --exit-status"
 AWS_ACCOUNT_ID='636301108823'
+# CIRCLE_SHA1='latest'
 
 configure_aws_cli(){
 	aws --version
@@ -45,7 +46,7 @@ make_task_def(){
 	task_template='[
 		{
 			"name": "etg-pactbroker",
-			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/pactbroker%s",
+			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/pactbroker:%s",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
@@ -63,7 +64,7 @@ make_task_def(){
 
 push_ecr_image(){
 	#eval $(aws ecr get-login --region us-east-1)
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker
+    docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1
 }
 
 register_definition() {
@@ -77,6 +78,6 @@ register_definition() {
 
 }
 
-#configure_aws_cli
+configure_aws_cli
 push_ecr_image
 deploy_cluster
