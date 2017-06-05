@@ -10,8 +10,6 @@ test:
   post:
     - docker run -d -p 8080:8080 --name pactbroker $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1; sleep 10
     - curl -sSf http://localhost:8080 > /dev/null
-    - docker stop pactbroker
-    - docker rm pactbroker
 
 deployment:
   prod:
