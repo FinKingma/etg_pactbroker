@@ -42,7 +42,7 @@ make_task_def(){
 	task_template='[
 		{
 			"name": "pactbroker",
-			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/pactbroker:%s",
+			"image": "%s.dkr.ecr.eu-central-1.amazonaws.com/pactbroker:%s",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
@@ -59,8 +59,8 @@ make_task_def(){
 }
 
 push_ecr_image(){
-	eval $(aws ecr get-login --region us-east-1)
-	docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/pactbroker:$CIRCLE_SHA1
+	eval $(aws ecr get-login --region eu-central-1)
+	docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/pactbroker:$CIRCLE_SHA1
 }
 
 register_definition() {
