@@ -5,7 +5,7 @@ JQ="jq --raw-output --exit-status"
 
 configure_aws_cli(){
 	aws --version
-	aws configure set default.region us-east-1
+	aws configure set default.region eu-central-1
 	aws configure set default.output json
 }
 
@@ -49,7 +49,7 @@ make_task_def(){
 			"portMappings": [
 				{
 					"containerPort": 8080,
-					"hostPort": 80
+					"hostPort": 0
 				}
 			]
 		}
