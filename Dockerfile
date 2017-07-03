@@ -1,4 +1,4 @@
-FROM cloudgear/ruby:2.2
+FROM ruby:2.3
 
 ENV APP_HOME=/home/app/pact_broker
 
@@ -8,6 +8,7 @@ ADD . $APP_HOME/
 RUN cd $APP_HOME
 
 WORKDIR $APP_HOME
+RUN gem install bundler
 RUN bundle
 
 EXPOSE 8080
